@@ -25,14 +25,18 @@ class Animal {
         void setId(int id) {this->id = id;}
         int getId() {return id;}
 
-        void setName(std::string name) {this->name = name;}
+        void setName(const std::string& name) {this->name = name;}
         std::string getName() {return name;}
 
-        void setSpecies(std::string species) {this->species = species;}
+        void setSpecies(const std::string& species) {this->species = species;}
         std::string getSpecies() {return species;}
 
         virtual void display() = 0;
-        virtual ~Animal() = default;
+        virtual ~Animal() {
+            delete walk;
+            delete fly;
+            delete swim;
+        }
 };
 
 
