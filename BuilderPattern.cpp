@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 class HttpRequest {
     string url;
     string method;
@@ -17,7 +16,6 @@ public:
         cout<<"Executing request with url: "<<url<<", method: "<<method<<", body: "<<body<<", headers: "<<headers<<", params: "<<params<<", cookies: "<<cookies<<endl;
     }
 };
-
 class HttpRequestBuilder {
     HttpRequest* req;
 public:
@@ -59,12 +57,29 @@ public:
         return req;
     }
 };
-
+class HttpRequestDirector {
+public:
+    static HttpRequest* createGetRequest(const string& url){
+        return HttpRequestBuilder()
+            .withUrl(url)
+            .withMethod("GET")
+            .build();
+    }
+    static HttpRequest* createJsonPostRequest(const string& url, const string& jsonBody){
+        return HttpRequestBuilder()
+            .withUrl(url)
+            .withMethod("POST")
+            .withHeaders("Content-Type: application/json, Accept: application/json")
+            .withBody(jsonBody)
+            .build();
+    }
+};
 int main(){
-    HttpRequestBuilder builder;
-    HttpRequest* req = builder.withUrl("https://test.com").withMethod("GET").build();
-
+    HttpRequest* req = HttpRequestBuilder().withUrl("https://test.com").withMethod("GET").build();
     req->execute();
+
+    HttpRequest* req1 = HttpRequestDirector::createJsonPostRequest("https://test.com", "{'name':'Ram'}");
+    req1->execute();
     return 0;
 }
 
